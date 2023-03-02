@@ -1,8 +1,11 @@
 import LoadingPage from "@/components/loading/LoadingPage";
+import NavButton from "@/components/NavButton";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   if (status === "loading")
     return (
       <>
@@ -13,8 +16,16 @@ export default function HomePage() {
     <>
       {session && (
         <>
-          <p>Welcome {session?.user?.name}</p>
-          <a href="api/auth/signout">Sign out</a>
+          <div className="w-full flex flex-col justify-center items-center space-y-6">
+            <p className="text-2xl font-bold">Welcome {session?.user?.name}!</p>
+            <NavButton
+              action={() => {
+                router.push("/todos");
+              }}
+            >
+              View Todos
+            </NavButton>
+          </div>
         </>
       )}
 

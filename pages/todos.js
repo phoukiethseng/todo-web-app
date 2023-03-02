@@ -27,7 +27,7 @@ export default function TodosPage() {
         <TodoList fetchTodoList={fetchData} />
         <BsPlusSquare
           onClick={() => setOpenAddTodoPopup(true)}
-          className="w-7 h-7 mx-auto text-gray-700 hover:text-green-700 hover:bg-slate-100 duration-100"
+          className="w-7 h-7 mx-auto text-gray-700 hover:text-[#00C071] duration-100"
         />
       </div>
     </>

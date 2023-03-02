@@ -1,31 +1,25 @@
-import { pb } from "@/config/pocketbaseConfig";
+import { prisma } from "@/lib/prismaClient";
 
 async function fetchUserTodos(userId) {
-  try {
-    const records = await pb.collection("userTodos").getFullList({
-      filter: `userId="${userId}"`,
-    });
-    const todos = records.map((record) => {
-      // Sanitize records, remove any sensitive information before sending to client
-      const {
-        collectionId,
-        collectionName,
-        userId,
-        userName,
-        created,
-        expand,
-        updated,
-        id,
-        ...rest
-      } = record;
-      console.log("fetchUserTodos", rest);
-      return rest;
-    });
-    return todos;
-  } catch (err) {
-    console.log("fetchUserTodos error", err);
+  let todos = await prisma.todo.findMany({
+    where: {
+      authorId: userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      content: true,
+    },
+  });
+  if (!todos) {
     return null;
   }
+  todos = todos.map((todo) => {
+    const { id: todoId, name: todoName, content: todoContent } = todo;
+    return { todoId, todoName, todoContent };
+  });
+  console.log("fetchUserTodos", todos);
+  return todos;
 }
 
 export { fetchUserTodos };
