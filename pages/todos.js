@@ -1,34 +1,83 @@
 // Display content of all user's todos
 
+import Button from "@/components/Button";
 import AddTodoPopUp from "@/components/todo/AddTodoPopUp";
 import TodoList from "@/components/todo/TodoList";
 import { authOptions } from "@/config/nextAuthConfig";
 import { getServerSession } from "next-auth";
-import { useCallback, useState } from "react";
-import { BsPlusSquare } from "react-icons/bs";
+import { useCallback, useEffect, useState } from "react";
 
 export default function TodosPage() {
-  const [openAddTodoPopup, setOpenAddTodoPopup] = useState(false);
-  const fetchData = useCallback(async () => {
-    const response = await fetch("/api/user/todos");
+  const [isLoading, setIsLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
+  const [PopupIsOpen, setOpenAddTodoPopup] = useState(false);
+  const [refreshToggle, setRefreshToggle] = useState(false);
+
+  // Fetching all todos, refetch if refreshToggle has changed
+  useEffect(() => {
+    console.log("fetching todos");
+    fetch("/api/user/todos")
+      .then((res) => res.json())
+      .then((todos) => {
+        setTodos(todos);
+        setIsLoading(false);
+      })
+      .catch(console.log);
+  }, [refreshToggle]);
+
+  // Make a POST request to backend, upon completion toggle refreshToggle which will trigger refetching data
+  const addTodo = useCallback(async (name, content) => {
+    const response = await fetch("api/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        content: content,
+      }),
+    });
+    console.log(response);
     if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      console.log(response);
+      console.log("added a new todo");
+      setOpenAddTodoPopup(false);
+      setRefreshToggle((prevVal) => !prevVal);
+    }
+  }, []);
+
+  // Make a DELETE request to backend, upon completion toggle refreshToggle which will trigger refetching data
+  const deleteTodo = useCallback(async (todoId) => {
+    const response = await fetch("/api/todo", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: todoId,
+      }),
+    });
+    if (response.ok) {
+      console.log("deleted a todo");
+      setRefreshToggle((prevVal) => !prevVal);
     }
   }, []);
   return (
     <>
-      {openAddTodoPopup && (
-        <AddTodoPopUp onClose={() => setOpenAddTodoPopup(false)} />
-      )}
-      <div className="flex flex-col justify-start items-stretch space-y-3">
-        <TodoList fetchTodoList={fetchData} />
-        <BsPlusSquare
-          onClick={() => setOpenAddTodoPopup(true)}
-          className="w-7 h-7 mx-auto text-gray-700 hover:text-[#00C071] duration-100"
+      {PopupIsOpen && (
+        <AddTodoPopUp
+          onSubmit={addTodo}
+          onClose={() => {
+            setOpenAddTodoPopup(false);
+          }}
         />
+      )}
+      <div className="flex flex-col justify-center px-6 pt-2 gap-4 max-w-3xl mx-auto">
+        <div className="p-4 flex flex-col justify-start items-center border-2 rounded-xl drop-shadow-md bg-gray-100">
+          <Button onClick={() => setOpenAddTodoPopup(true)}>New Todos</Button>
+        </div>
+        <div className="flex flex-col justify-start items-stretch border-2 rounded-xl drop-shadow-md space-y-3 p-5 bg-gray-100">
+          <TodoList onDelete={deleteTodo} isLoading={isLoading} todos={todos} />
+        </div>
       </div>
     </>
   );

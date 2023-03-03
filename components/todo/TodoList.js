@@ -1,34 +1,19 @@
-import TodoView from "./TodoView";
-import { useState, useEffect } from "react";
 import LoadingPage from "components/loading/LoadingPage";
+import TodoItem from "./TodoItem";
 
-export default function TodoList({ fetchTodoList }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [todos, setTodos] = useState([]);
-  useEffect(() => {
-    // Fetch todos list
-    console.log("running fetchTodoList");
-    fetchTodoList()
-      .then((data) => {
-        setIsLoading(false);
-        setTodos(data);
-      })
-      .catch((err) => console.log);
-    return () => {};
-  }, []);
-  useEffect(() => {
-    console.log("fetchTodoList has changed");
-  }, [fetchTodoList]);
+export default function TodoList({ todos, isLoading, onDelete }) {
   if (isLoading) {
     return <LoadingPage />;
   }
   return (
     <ul className="flex flex-col justify-start items-stretch gap-2">
       {todos.map((todo) => (
-        <TodoView
+        <TodoItem
           key={todo.todoId}
+          id={todo.todoId}
           name={todo.todoName}
           content={todo.todoContent}
+          onDelete={onDelete}
         />
       ))}
     </ul>

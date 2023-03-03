@@ -8,7 +8,7 @@ export default function NavButton({ children, action, href }) {
             action();
           }
         }}
-        className="w-max px-3 py-2 font-bold border-2 border-white hover:bg-[#F39000] active:text-white rounded-full text-center duration-200 ease-in-out text-white"
+        className="w-max px-3 py-2 font-bold border-2 hover:border-[#F39000] hover:bg-[#F39000] rounded-full text-center duration-100 ease-in-out text-white"
       >
         {children}
       </button>
