@@ -15,7 +15,7 @@ export default function HomePage() {
     );
   return (
     <>
-      <div className="w-full min-h-[150px] flex flex-col justify-center items-center space-y-6">
+      <div className="w-full min-h-[150px] flex flex-col justify-center items-center gap-6">
         {session && (
           <>
             <p className="text-2xl font-bold text-slate-700">
@@ -28,11 +28,17 @@ export default function HomePage() {
         {!session && (
           <>
             <p className="text-2xl font-bold text-slate-700">
-              You have not sign in
+              You are not signed in
             </p>
-            <Link href="/api/auth/signin">
-              <Button>Sign in</Button>
-            </Link>
+            <div className="flex flex-row gap-3 justify-center items-center">
+              <Link href="/api/auth/signin">
+                <Button>Sign in</Button>
+              </Link>
+              <p className="text-xl">or</p>
+              <Link href="/signup">
+                <Button>Sign up</Button>
+              </Link>
+            </div>
           </>
         )}
       </div>

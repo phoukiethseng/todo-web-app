@@ -13,6 +13,7 @@ export default function TodosPage() {
   const [PopupIsOpen, setOpenAddTodoPopup] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
 
+  console.log("TodosPage render!");
   // Fetching all todos, refetch if refreshToggle has changed
   useEffect(() => {
     console.log("fetching todos");

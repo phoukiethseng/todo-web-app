@@ -7,7 +7,7 @@ export default function MainLayout({ children }) {
   const { status, data } = useSession();
   return (
     <>
-      <nav className="fixed top-0 w-screen h-16 flex flex-row justify-between items-center drop-shadow-md pl-4 pr-6 bg-gradient-to-r from-[#00C071] to-[#9DDC10] bg-transparent ">
+      <nav className="fixed top-0 w-screen h-16 flex flex-row justify-between items-center drop-shadow-md pl-4 pr-6 bg-gradient-to-r from-[#00C071] to-[#9DDC10] bg-transparent z-50 ">
         <div className="flex flex-row h-full items-center space-x-8">
           <a href="/">
             <div className="flex flex-row justify-center items-center w-max space-x-4">
