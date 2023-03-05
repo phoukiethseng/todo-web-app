@@ -1,6 +1,7 @@
 import { addNewUser } from "@/utils/addNewUser";
 import getUserByUsername from "@/utils/getUserByUsername";
 import { getCsrfToken } from "next-auth/react";
+import { Validator } from "node-input-validator";
 
 export default async function handler(req, res) {
   //TODO: verify csrfToken
@@ -10,17 +11,30 @@ export default async function handler(req, res) {
     res.status(403).end();
     return;
   }
-  //TODO: query database, if there is exisiting username, deny request
+  // Validate request
   const { username, password, email, name } = req.body;
-  if (!username || !password || !email || !name) {
-    // Invalid request body
-    res.status(400).send({ message: "Please check your information again!" });
+  const credentialsValidator = new Validator(req.body, {
+    email: "required|email",
+    name: "required|maxLength:50",
+    username: "required|maxLength:30|alphaNumeric",
+    password: "required|minLength:8|maxLength:50",
+  });
+  const validateSuccess = await credentialsValidator.check();
+  if (!validateSuccess) {
+    console.log("credentialsValidator.errors", credentialsValidator.errors);
+    res.status(400).send({
+      message: credentialsValidator.errors,
+    });
     return;
   }
   if (await getUserByUsername(username)) {
     // There is an existing user, deny request
     res.status(400).send({
-      message: "Username already existed, Please choose another one!",
+      message: {
+        username: {
+          message: "Username already existed, Please choose another one!",
+        },
+      },
     });
     return;
   }
