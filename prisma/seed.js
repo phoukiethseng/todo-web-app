@@ -1,13 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcrypt");
 
 const client = new PrismaClient();
+const saltRound = 12;
 
 const populateDatabase = async () => {
   const user1 = await client.user.create({
     data: {
       name: "Phou Kiethseng",
       username: "kiethseng",
-      password: "012858378",
+      password: bcrypt.hashSync("012858378", saltRound),
       email: "puseng123@gmail.com",
       todos: {
         create: [
@@ -27,7 +29,7 @@ const populateDatabase = async () => {
     data: {
       name: "Phal Emy",
       username: "emy",
-      password: "12345678",
+      password: bcrypt.hashSync("12345678", saltRound),
       email: "emyphal@gmail.com",
       todos: {
         create: [

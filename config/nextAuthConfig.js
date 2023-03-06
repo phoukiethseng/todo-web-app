@@ -2,6 +2,7 @@
 
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prismaClient";
+import bcrypt from "bcrypt";
 
 const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -17,20 +18,36 @@ const authOptions = {
       },
       authorize: async (credentials, req) => {
         // Query pocketbase for user information
-        const user = await prisma.user.findFirst({
+        let user = await prisma.user.findFirst({
           where: {
             username: credentials.username,
-            password: credentials.password,
           },
           select: {
-            id: true,
-            name: true,
-            email: true,
-            image: true,
+            password: true,
           },
         });
-        console.log("authorize() user", user);
-        return user ?? false;
+        if (!user) {
+          // User not found
+          return false;
+        }
+        if (await bcrypt.compare(credentials.password, user.password)) {
+          console.log("bcrypt comapre success");
+          user = await prisma.user.findFirst({
+            where: {
+              username: credentials.username,
+            },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          });
+          console.log("Authorized", user);
+          return user;
+        } else {
+          return false;
+        }
       },
     }),
   ],

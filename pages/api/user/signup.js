@@ -2,6 +2,7 @@ import { addNewUser } from "@/utils/addNewUser";
 import getUserByUsername from "@/utils/getUserByUsername";
 import { getCsrfToken } from "next-auth/react";
 import { Validator } from "node-input-validator";
+import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
   //TODO: verify csrfToken
@@ -39,8 +40,12 @@ export default async function handler(req, res) {
     return;
   }
 
+  // Salt and hash password
+  const saltRound = 12;
+  const hashedPassword = await bcrypt.hash(password, saltRound);
+
   // Add new user
-  if (await addNewUser({ name, username, password, email })) {
+  if (await addNewUser({ name, username, password: hashedPassword, email })) {
     res.status(200).send({ message: "Sign up success!" });
   }
 }
