@@ -1,7 +1,12 @@
 import LoadingPage from "components/loading/LoadingPage";
 import TodoItem from "./TodoItem";
 
-export default function TodoList({ todos, isLoading, onDelete }) {
+export default function TodoList({
+  todos,
+  isLoading,
+  onDelete,
+  onCheckChange,
+}) {
   if (isLoading) {
     return <LoadingPage />;
   }
@@ -13,6 +18,8 @@ export default function TodoList({ todos, isLoading, onDelete }) {
           id={todo.todoId}
           name={todo.todoName}
           content={todo.todoContent}
+          checked={todo.todoChecked}
+          onCheckChange={onCheckChange}
           onDelete={onDelete}
         />
       ))}

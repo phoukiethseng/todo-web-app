@@ -2,6 +2,7 @@ import { authOptions } from "@/config/nextAuthConfig";
 import addTodo from "@/utils/addTodo";
 import deleteTodo from "@/utils/deleteTodo";
 import fetchSingleTodo from "@/utils/fetchUserSingleTodo";
+import updateTodo from "@/utils/updateTodo";
 import { getServerSession } from "next-auth";
 
 export default async function handler(req, res) {
@@ -22,9 +23,18 @@ export default async function handler(req, res) {
     case "DELETE":
       handleDELETE(req, res);
       break;
+    case "PUT":
+      handlePUT(req, res);
+      break;
     default:
       res.status(405).end();
   }
+}
+
+async function handlePUT(req, res) {
+  console.log("handlePUT", req.body);
+  const todo = await updateTodo(req.body);
+  res.status(todo ? 200 : 500).end();
 }
 
 async function handleGET(req, res) {

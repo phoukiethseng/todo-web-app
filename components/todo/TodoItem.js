@@ -1,7 +1,20 @@
 import { FiTrash2 } from "react-icons/fi";
-export default function TodoItem({ id, name, content, onDelete }) {
+export default function TodoItem({
+  id,
+  name,
+  content,
+  checked,
+  onDelete,
+  onCheckChange,
+}) {
   return (
-    <div className="grid grid-cols-3 min-h-[4rem] text-center items-center border-2 shadow-sm rounded-lg pl-4 hover:bg-slate-100 duration-100">
+    <div className="grid grid-cols-4 min-h-[4rem] text-center items-center border-2 shadow-sm rounded-lg pl-4 hover:bg-slate-100 duration-100">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={() => onCheckChange(id)}
+        className="w-5 h-5"
+      />
       <label className="overflow-x-hidden">{name}</label>
       <p className="overflow-x-hidden">{content}</p>
       <FiTrash2

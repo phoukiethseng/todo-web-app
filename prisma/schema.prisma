@@ -18,9 +18,10 @@ model User {
 }
 
 model Todo {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
   content  String
   authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  checked  Boolean @default(false)
+  author   User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

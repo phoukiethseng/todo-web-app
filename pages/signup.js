@@ -21,52 +21,50 @@ export default function SignUpPage({ crsfToken }) {
 
   const handleSignUpSubmit = useCallback(
     async (e) => {
-      e.preventDefault();
-      await Promise.resolve().then(() => setShowMessage(false));
-      const response = await fetch("/api/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          crsfToken: crsfToken,
-          email: emailRef.current.value,
-          name: nameRef.current.value,
-          username: usernameRef.current.value,
-          password: passwordRef.current.value,
-        }),
-      });
-      const body = await response.json();
-      let message = "";
-      const newInputValid = {
-        email: true,
-        name: true,
-        username: true,
-        password: true,
-      };
-      if (response.ok) {
-        // Sign up success
-        message = body.message;
-      } else {
-        // Sign up failed
+    e.preventDefault();
+    await Promise.resolve().then(() => setShowMessage(false));
+    const response = await fetch("/api/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        crsfToken: crsfToken,
+        email: emailRef.current.value,
+        name: nameRef.current.value,
+        username: usernameRef.current.value,
+        password: passwordRef.current.value,
+      }),
+    });
+    const body = await response.json();
+    let message = "";
+    const newInputValid = {
+      email: true,
+      name: true,
+      username: true,
+      password: true,
+    };
+    if (response.ok) {
+      // Sign up success
+      message = body.message;
+    } else {
+      // Sign up failed
 
-        for (const [key, value] of Object.entries(body.message)) {
-          newInputValid[key] = false;
-          message = message.concat(body.message[key].message + "\n");
-        }
+      for (const [key, value] of Object.entries(body.message)) {
+        newInputValid[key] = false;
+        message = message.concat(body.message[key].message + "\n");
       }
-      setInputValid(newInputValid);
-      setSignUpSuccess(response.ok);
-      setMessage(message);
-      setShowMessage(true);
-      if (response.ok) {
-        setTimeout(() => {
-          signIn();
-        }, 2000);
-      }
-    },
-    [inputValid]
-  );
+    }
+    setInputValid(newInputValid);
+    setSignUpSuccess(response.ok);
+    setMessage(message);
+    setShowMessage(true);
+    if (response.ok) {
+      setTimeout(() => {
+        signIn();
+      }, 2000);
+    }
+  }, []);
   return (
     <div className="flex flex-col gap-4 py-8 justify-center items-center border-2 w-[50vw] mx-auto rounded-xl">
       <form

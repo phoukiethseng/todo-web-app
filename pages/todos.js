@@ -62,6 +62,35 @@ export default function TodosPage() {
       setRefreshToggle((prevVal) => !prevVal);
     }
   }, []);
+
+  const handleOnCheckChange = useCallback(
+    async (todoId) => {
+      // Get corresponding todo item from todos state
+      console.log("handleOnCheckChange todoId", todoId);
+      const todoItem = todos.find((e) => e.todoId === todoId);
+      console.log("handleOnCheckChange todoItem", todoItem);
+
+      // Make a PUT fetch request to /api/todo to update todo item, then refresh todos data
+      const response = await fetch("/api/todo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: todoId,
+          name: todoItem.todoName,
+          content: todoItem.todoContent,
+          checked: !todoItem.todoChecked,
+        }),
+      });
+      if (response.ok) {
+        console.log("handleOnCheckChange response.ok", response.ok);
+        setRefreshToggle((prevVal) => !prevVal);
+      }
+    },
+    [todos]
+  );
+
   return (
     <>
       {PopupIsOpen && (
@@ -77,7 +106,12 @@ export default function TodosPage() {
           <Button onClick={() => setOpenAddTodoPopup(true)}>New Todos</Button>
         </div>
         <div className="flex flex-col justify-start items-stretch border-2 rounded-xl drop-shadow-md space-y-3 p-5 bg-gray-100">
-          <TodoList onDelete={deleteTodo} isLoading={isLoading} todos={todos} />
+          <TodoList
+            onDelete={deleteTodo}
+            isLoading={isLoading}
+            onCheckChange={handleOnCheckChange}
+            todos={todos}
+          />
         </div>
       </div>
     </>
