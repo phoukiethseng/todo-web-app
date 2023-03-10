@@ -5,13 +5,15 @@ import AddTodoPopUp from "@/components/todo/AddTodoPopUp";
 import TodoList from "@/components/todo/TodoList";
 import { authOptions } from "@/config/nextAuthConfig";
 import { getServerSession } from "next-auth";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 
 export default function TodosPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState([]);
   const [PopupIsOpen, setOpenAddTodoPopup] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
+  const [filteredTodos, setFilteredTodos] = useState([]);
+  const searchInputRef = useRef();
 
   console.log("TodosPage render!");
   // Fetching all todos, refetch if refreshToggle has changed
@@ -25,6 +27,12 @@ export default function TodosPage() {
       })
       .catch(console.log);
   }, [refreshToggle]);
+
+  // Whenever todos changes, update the filtered search result
+  useEffect(() => {
+    handleSearch();
+    return () => {};
+  }, [todos]);
 
   // Make a POST request to backend, upon completion toggle refreshToggle which will trigger refetching data
   const addTodo = useCallback(async (name, content) => {
@@ -91,6 +99,18 @@ export default function TodosPage() {
     [todos]
   );
 
+  const handleSearch = useCallback(() => {
+    const searchText = searchInputRef.current.value.toLowerCase();
+    if (searchText === "") {
+      setFilteredTodos(todos);
+      return;
+    }
+    const newFilteredTodos = todos.filter((todo) =>
+      todo.todoName.toLowerCase().includes(searchText)
+    );
+    setFilteredTodos(newFilteredTodos);
+  }, [searchInputRef, todos]);
+
   return (
     <>
       {PopupIsOpen && (
@@ -102,7 +122,13 @@ export default function TodosPage() {
         />
       )}
       <div className="flex flex-col justify-center px-6 pt-2 gap-4 max-w-3xl mx-auto">
-        <div className="p-4 flex flex-col justify-start items-center border-2 rounded-xl drop-shadow-md bg-gray-100">
+        <div className="p-4 flex flex-row justify-center items-center border-2 rounded-xl drop-shadow-md bg-gray-100 gap-4">
+          <input
+            ref={searchInputRef}
+            type="text"
+            className="w-56 h-10 pl-2 rounded-lg drop-shadow-sm border-2 border-slate-300"
+          />
+          <Button onClick={() => handleSearch()}>Search</Button>
           <Button onClick={() => setOpenAddTodoPopup(true)}>New Todos</Button>
         </div>
         <div className="flex flex-col justify-start items-stretch border-2 rounded-xl drop-shadow-md space-y-3 p-5 bg-gray-100">
@@ -110,7 +136,7 @@ export default function TodosPage() {
             onDelete={deleteTodo}
             isLoading={isLoading}
             onCheckChange={handleOnCheckChange}
-            todos={todos}
+            todos={filteredTodos}
           />
         </div>
       </div>
