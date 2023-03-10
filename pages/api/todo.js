@@ -33,8 +33,8 @@ export default async function handler(req, res) {
 
 async function handlePUT(req, res) {
   console.log("handlePUT", req.body);
-  const todo = await updateTodo(req.body);
-  res.status(todo ? 200 : 500).end();
+  const result = await updateTodo(req.body);
+  res.status(result ? 200 : 500).send(JSON.stringify(result));
 }
 
 async function handleGET(req, res) {
@@ -55,10 +55,10 @@ async function handlePOST(req, res, userId) {
       content: req.body.content,
     },
   });
-  res.status(result ? 200 : 500).end();
+  res.status(result ? 200 : 500).send(JSON.stringify(result));
 }
 
 async function handleDELETE(req, res) {
   const result = await deleteTodo(req.body.id);
-  res.status(result ? 200 : 500).end();
+  res.status(result ? 200 : 500).send(result);
 }

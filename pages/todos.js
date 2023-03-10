@@ -35,65 +35,72 @@ export default function TodosPage() {
   }, [todos]);
 
   // Make a POST request to backend, upon completion toggle refreshToggle which will trigger refetching data
-  const addTodo = useCallback(async (name, content) => {
-    const response = await fetch("api/todo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        content: content,
-      }),
-    });
-    console.log(response);
-    if (response.ok) {
-      console.log("added a new todo");
-      setOpenAddTodoPopup(false);
-      setRefreshToggle((prevVal) => !prevVal);
-    }
-  }, []);
+  const addTodo = useCallback(
+    async (name, content) => {
+      const response = await fetch("api/todo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          content: content,
+        }),
+      });
+      console.log(response);
+      if (response.ok) {
+        console.log("added a new todo");
+        const newTodo = await response.json();
+        setOpenAddTodoPopup(false);
+        setTodos([...todos, newTodo]);
+      }
+    },
+    [todos]
+  );
 
   // Make a DELETE request to backend, upon completion toggle refreshToggle which will trigger refetching data
-  const deleteTodo = useCallback(async (todoId) => {
-    const response = await fetch("/api/todo", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: todoId,
-      }),
-    });
-    if (response.ok) {
-      console.log("deleted a todo");
-      setRefreshToggle((prevVal) => !prevVal);
-    }
-  }, []);
+  const deleteTodo = useCallback(
+    async (todoId) => {
+      const response = await fetch("/api/todo", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: todoId,
+        }),
+      });
+      if (response.ok) {
+        const { id } = await response.json();
+        if (id === todoId) {
+          setTodos(todos.filter((todo) => todo.id !== id));
+        }
+      }
+    },
+    [todos]
+  );
 
   const handleOnCheckChange = useCallback(
-    async (todoId) => {
+    async (targetTodoId) => {
       // Get corresponding todo item from todos state
-      console.log("handleOnCheckChange todoId", todoId);
-      const todoItem = todos.find((e) => e.id === todoId);
-      console.log("handleOnCheckChange todoItem", todoItem);
+      const targetTodoItem = todos.find((e) => e.id === targetTodoId);
 
-      // Make a PUT fetch request to /api/todo to update todo item, then refresh todos data
+      // Make a PUT fetch request to /api/todo to update todo item, then update todos state
       const response = await fetch("/api/todo", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: todoId,
-          name: todoItem.name,
-          content: todoItem.content,
-          checked: !todoItem.checked,
+          ...targetTodoItem,
+          checked: !targetTodoItem.checked,
         }),
       });
       if (response.ok) {
-        console.log("handleOnCheckChange response.ok", response.ok);
-        setRefreshToggle((prevVal) => !prevVal);
+        const updatedTodo = await response.json();
+        setTodos(
+          todos.map((todo) => (todo.id === targetTodoId ? updatedTodo : todo))
+        );
       }
     },
     [todos]

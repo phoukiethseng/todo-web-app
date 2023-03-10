@@ -6,5 +6,7 @@ export default async function deleteTodo(todoId) {
       id: todoId,
     },
   });
-  return result ?? null;
+  return {
+    id: result?.id,
+  };
 }

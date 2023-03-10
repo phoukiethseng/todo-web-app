@@ -15,6 +15,12 @@ export default async function updateTodo({ id, name, content, checked }) {
         content: content,
         checked: checked,
       },
+      select: {
+        id: true,
+        name: true,
+        content: true,
+        checked: true,
+      },
     });
     console.log("updateTodo returning", todo);
     return todo ?? null;

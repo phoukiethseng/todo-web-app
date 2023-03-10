@@ -12,6 +12,12 @@ export default async function addTodo({ userId, todo: { name, content } }) {
           },
         },
       },
+      select: {
+        id: true,
+        name: true,
+        content: true,
+        checked: true,
+      },
     });
     console.log("addTodo()", todo);
   } catch (err) {
