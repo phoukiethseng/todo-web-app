@@ -18,15 +18,6 @@ async function fetchUserTodos(userId) {
   if (!todos) {
     return null;
   }
-  todos = todos.map((todo) => {
-    const {
-      id: todoId,
-      name: todoName,
-      content: todoContent,
-      checked: todoChecked,
-    } = todo;
-    return { todoId, todoName, todoContent, todoChecked };
-  });
   console.log("fetchUserTodos", todos);
   return todos;
 }

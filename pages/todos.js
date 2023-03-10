@@ -75,7 +75,7 @@ export default function TodosPage() {
     async (todoId) => {
       // Get corresponding todo item from todos state
       console.log("handleOnCheckChange todoId", todoId);
-      const todoItem = todos.find((e) => e.todoId === todoId);
+      const todoItem = todos.find((e) => e.id === todoId);
       console.log("handleOnCheckChange todoItem", todoItem);
 
       // Make a PUT fetch request to /api/todo to update todo item, then refresh todos data
@@ -86,9 +86,9 @@ export default function TodosPage() {
         },
         body: JSON.stringify({
           id: todoId,
-          name: todoItem.todoName,
-          content: todoItem.todoContent,
-          checked: !todoItem.todoChecked,
+          name: todoItem.name,
+          content: todoItem.content,
+          checked: !todoItem.checked,
         }),
       });
       if (response.ok) {
@@ -106,7 +106,7 @@ export default function TodosPage() {
       return;
     }
     const newFilteredTodos = todos.filter((todo) =>
-      todo.todoName.toLowerCase().includes(searchText)
+      todo.name.toLowerCase().includes(searchText)
     );
     setFilteredTodos(newFilteredTodos);
   }, [searchInputRef, todos]);

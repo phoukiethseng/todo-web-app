@@ -20,13 +20,6 @@ export default async function fetchSingleTodo(givenId) {
   if (!todo) {
     return null;
   }
-  const {
-    id: todoId,
-    name: todoName,
-    content: todoContent,
-    checked: todoChecked,
-  } = todo;
-  todo = { todoId, todoName, todoContent, todoChecked };
   console.log("fetchSingleTodo", todo);
   return todo;
 }
