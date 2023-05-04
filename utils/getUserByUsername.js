@@ -1,11 +1,18 @@
-import { prisma } from "@/lib/prismaClient";
+import { prisma as prismaClient } from "@/lib/prismaClient";
 
-export default async function getUserByUsername(username) {
-  const user = await prisma.user.findFirst({
-    where: {
-      username: username,
-    },
-  });
-  console.log("getUserByUsername returning", user);
-  return user;
+export async function getUserByUsername(username, prisma = prismaClient) {
+  if (username === null) {
+    return null;
+  }
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    console.log("getUserByUsername returning", user);
+    return user;
+  } catch (err) {
+    return null;
+  }
 }

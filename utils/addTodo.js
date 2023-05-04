@@ -1,5 +1,12 @@
-import { prisma } from "@/lib/prismaClient";
-export default async function addTodo({ userId, todo: { name, content } }) {
+import { prisma as prismaClient } from "@/lib/prismaClient";
+export async function addTodo({
+  userId,
+  todo: { name, content },
+  prisma = prismaClient,
+}) {
+  if (userId === null || name === null || content === null) {
+    return null;
+  }
   let todo;
   try {
     todo = await prisma.todo.create({

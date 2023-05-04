@@ -1,34 +1,36 @@
 import { authOptions } from "@/config/nextAuthConfig";
-import addTodo from "@/utils/addTodo";
-import deleteTodo from "@/utils/deleteTodo";
-import fetchSingleTodo from "@/utils/fetchUserSingleTodo";
-import updateTodo from "@/utils/updateTodo";
+import { addTodo } from "@/utils/addTodo";
+import { deleteTodo } from "@/utils/deleteTodo";
+import { fetchUserSingleTodo } from "@/utils/fetchUserSingleTodo";
+import { updateTodo } from "@/utils/updateTodo";
 import { getServerSession } from "next-auth";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
-    res.status(403).end();
+    res.status(403);
+    res.end();
     return;
   }
   // TODO: Prevent request to todo that does not belong to currently logged-in user
 
   switch (req.method) {
     case "GET":
-      handleGET(req, res);
+      await handleGET(req, res);
       break;
     case "POST":
-      handlePOST(req, res, session.user.id);
+      await handlePOST(req, res, session.user.id);
       break;
     case "DELETE":
-      handleDELETE(req, res);
+      await handleDELETE(req, res);
       break;
     case "PUT":
-      handlePUT(req, res);
+      await handlePUT(req, res);
       break;
     default:
       res.status(405).end();
   }
+  res.end();
 }
 
 async function handlePUT(req, res) {
@@ -38,7 +40,7 @@ async function handlePUT(req, res) {
 }
 
 async function handleGET(req, res) {
-  const result = await fetchSingleTodo(req.body.id);
+  const result = await fetchUserSingleTodo(req.body.id);
   if (result === null) {
     res.status(404).end();
     return;

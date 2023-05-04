@@ -1,5 +1,5 @@
 import { addNewUser } from "@/utils/addNewUser";
-import getUserByUsername from "@/utils/getUserByUsername";
+import { getUserByUsername } from "@/utils/getUserByUsername";
 import { getCsrfToken } from "next-auth/react";
 import { Validator } from "node-input-validator";
 import bcrypt from "bcrypt";
@@ -20,8 +20,8 @@ export default async function handler(req, res) {
     username: "required|maxLength:30|alphaNumeric",
     password: "required|minLength:8|maxLength:50",
   });
-  const validateSuccess = await credentialsValidator.check();
-  if (!validateSuccess) {
+  const valid = await credentialsValidator.check();
+  if (!valid) {
     console.log("credentialsValidator.errors", credentialsValidator.errors);
     res.status(400).send({
       message: credentialsValidator.errors,

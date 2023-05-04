@@ -1,5 +1,8 @@
-import { prisma } from "@/lib/prismaClient";
-export default async function fetchSingleTodo(givenId) {
+import { prisma as prismaClient } from "@/lib/prismaClient";
+export async function fetchUserSingleTodo(givenId, prisma = prismaClient) {
+  if (givenId === null) {
+    return null;
+  }
   let todo;
   try {
     todo = await prisma.todo.findFirst({
@@ -13,13 +16,10 @@ export default async function fetchSingleTodo(givenId) {
         checked: true,
       },
     });
+    console.log("fetchSingleTodo", todo);
+    return todo ?? null;
   } catch (err) {
     console.log(err);
     return null;
   }
-  if (!todo) {
-    return null;
-  }
-  console.log("fetchSingleTodo", todo);
-  return todo;
 }

@@ -17,7 +17,6 @@ const authOptions = {
         },
       },
       authorize: async (credentials, req) => {
-        // Query pocketbase for user information
         let user = await prisma.user.findFirst({
           where: {
             username: credentials.username,

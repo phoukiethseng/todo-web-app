@@ -1,6 +1,15 @@
-import { prisma } from "@/lib/prismaClient";
+import { prisma as prismaClient } from "@/lib/prismaClient";
 
-export default async function updateTodo({ id, name, content, checked }) {
+export async function updateTodo({
+  id,
+  name,
+  content,
+  checked,
+  prisma = prismaClient,
+}) {
+  if (id === null || name === null || content === null || checked === null) {
+    return null;
+  }
   console.log("updateTodo id", id);
   console.log("updateTodo name", name);
   console.log("updateTodo content", content);
