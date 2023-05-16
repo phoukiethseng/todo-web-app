@@ -4,12 +4,8 @@ import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }) {
-  const { session } = pageProps;
+  const { session, useLayout } = pageProps;
   const router = useRouter();
-  let useLayout = true;
-  if (router.pathname === "/") {
-    useLayout = false;
-  }
   return (
     <SessionProvider session={session}>
       {!useLayout && <Component {...pageProps} />}

@@ -45,3 +45,11 @@ export default function HomePage() {
     </>
   );
 }
+
+export function getServerSideProps() {
+  return {
+    props: {
+      useLayout: true,
+    },
+  };
+}

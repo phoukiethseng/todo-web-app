@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background-color: #EFFDF3;
+@font-face {
+    font-family: SecularOne;
+    src: url("../public/SecularOne-Regular.ttf");
+}
+@font-face {
+    font-family: Roboto;
+    src: url("../public/Roboto/Roboto-Light.ttf");
 }

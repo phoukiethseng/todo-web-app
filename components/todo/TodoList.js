@@ -1,5 +1,5 @@
 import LoadingPage from "components/loading/LoadingPage";
-import TodoItem from "./TodoItem";
+import { TodoCard } from "../v2/TodoCard";
 
 export default function TodoList({
   todos,
@@ -11,15 +11,14 @@ export default function TodoList({
     return <LoadingPage />;
   }
   return (
-    <ul className="flex flex-col justify-start items-stretch gap-2">
+    <ul className="grid grid-cols-3 justify-start items-stretch gap-2">
       {todos.map((todo) => (
-        <TodoItem
+        <TodoCard
           key={todo.id}
           id={todo.id}
-          name={todo.name}
-          content={todo.content}
-          checked={todo.checked}
-          onCheckChange={onCheckChange}
+          title={todo.name}
+          completed={todo.checked}
+          onComplete={onCheckChange}
           onDelete={onDelete}
         />
       ))}

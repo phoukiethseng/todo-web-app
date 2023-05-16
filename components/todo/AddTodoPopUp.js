@@ -38,11 +38,12 @@ export default function AddTodoPopUp({ onClose, onSubmit }) {
           placeholder="Title"
           className="w-[50vw] h-10 pl-3 rounded-md drop-shadow"
         />
-        <input
+        <textarea
+          rows={10}
+          cols={50}
           ref={content}
           name="content"
-          type="text"
-          className="w-[50vw] h-[50vh] pl-3 rounded-md drop-shadow"
+          className="w-[50vw] h-[50vh] pl-3 py-6 rounded-md drop-shadow"
         />
         <Button onClick={handleSubmit}>Add</Button>
         <Button onClick={handleCancel}>Cancel</Button>
