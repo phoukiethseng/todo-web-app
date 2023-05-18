@@ -1,10 +1,10 @@
-import { addNewUser } from "../../utils/addNewUser";
-import { addTodo } from "../../utils/addTodo";
-import { deleteTodo } from "../../utils/deleteTodo";
-import { fetchUserSingleTodo } from "../../utils/fetchUserSingleTodo";
-import { fetchUserTodos } from "../../utils/fetchUserTodos";
-import { getUserByUsername } from "../../utils/getUserByUsername";
-import { updateTodo } from "../../utils/updateTodo";
+import { addNewUser } from "../../../utils/backend/addNewUser";
+import { addTodo } from "../../../utils/backend/addTodo";
+import { deleteTodo } from "../../../utils/backend/deleteTodo";
+import { fetchUserSingleTodo } from "../../../utils/backend/fetchUserSingleTodo";
+import { fetchUserTodos } from "../../../utils/backend/fetchUserTodos";
+import { getUserByUsername } from "../../../utils/backend/getUserByUsername";
+import { updateTodo } from "../../../utils/backend/updateTodo";
 
 describe("Utils function return null when error thrown", () => {
   test("addNewUser test", async () => {

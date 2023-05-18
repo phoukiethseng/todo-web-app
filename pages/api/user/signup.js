@@ -1,4 +1,4 @@
-import { addNewUser } from "@/utils/addNewUser";
+import { addNewUser } from "@/utils/backend/addNewUser";
 import { getUserByUsername } from "@/utils/getUserByUsername";
 import { getCsrfToken } from "next-auth/react";
 import { Validator } from "node-input-validator";

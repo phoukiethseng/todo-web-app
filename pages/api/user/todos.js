@@ -1,4 +1,4 @@
-import { fetchUserTodos } from "@/utils/fetchUserTodos";
+import { fetchUserTodos } from "@/utils/backend/fetchUserTodos";
 import { authOptions } from "@/config/nextAuthConfig";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";

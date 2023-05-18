@@ -1,8 +1,8 @@
 import { authOptions } from "@/config/nextAuthConfig";
-import { addTodo } from "@/utils/addTodo";
-import { deleteTodo } from "@/utils/deleteTodo";
-import { fetchUserSingleTodo } from "@/utils/fetchUserSingleTodo";
-import { updateTodo } from "@/utils/updateTodo";
+import { addTodo } from "@/utils/backend/addTodo";
+import { deleteTodo } from "@/utils/backend/deleteTodo";
+import { fetchUserSingleTodo } from "@/utils/backend/fetchUserSingleTodo";
+import { updateTodo } from "@/utils/backend/updateTodo";
 import { getServerSession } from "next-auth";
 
 export default async function handler(req, res) {
