@@ -1,13 +1,11 @@
 FROM node:16-alpine
 
+RUN apk update
+
 WORKDIR /app
 
-COPY /package.json /package-lock.json ./
+COPY /package.json /package-lock.json ./prisma/schema.prisma ./
 
-RUN npm ci
+RUN npm ci && npx prisma generate && rm -f schema.prisma
 
-COPY . .
-
-RUN npx prisma generate && npm run build
-
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
