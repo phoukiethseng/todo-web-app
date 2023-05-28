@@ -1,2 +1,1 @@
-npx prisma migrate dev
-npm run dev
+npx prisma migrate dev && npm run dev
