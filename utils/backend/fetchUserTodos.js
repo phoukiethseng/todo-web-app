@@ -11,9 +11,10 @@ async function fetchUserTodos(userId, prisma = prismaClient) {
       },
       select: {
         id: true,
-        name: true,
-        content: true,
-        checked: true,
+        title: true,
+        completed: true,
+        deadline: true,
+        priority: true,
       },
       orderBy: {
         id: "asc",

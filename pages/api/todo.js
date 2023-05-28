@@ -36,6 +36,7 @@ export default async function handler(req, res) {
 async function handlePUT(req, res) {
   console.log("handlePUT", req.body);
   const result = await updateTodo(req.body);
+  console.log("handlePUT result", result);
   res.status(result ? 200 : 500).send(JSON.stringify(result));
 }
 

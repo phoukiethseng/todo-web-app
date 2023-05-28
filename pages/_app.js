@@ -1,20 +1,25 @@
 import "@/styles/globals.css";
-import MainLayout from "@/components/layout/MainLayout";
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/router";
+import NavBar from "@/components/v2/layout/NavBar";
 
 export default function App({ Component, pageProps }) {
-  const { session, useLayout } = pageProps;
+  const { session, useLayout, navMenuEnable } = pageProps;
   const router = useRouter();
   return (
     <SessionProvider session={session}>
-      {!useLayout && <Component {...pageProps} />}
-
       {useLayout && (
-        <MainLayout>
+        <>
+          <NavBar
+            signedIn={session ? true : false}
+            userName={session?.user.name}
+            imgUrl={session?.user.image}
+            navMenuEnable={navMenuEnable}
+          />
           <Component {...pageProps} />
-        </MainLayout>
+        </>
       )}
+      {!useLayout && <Component {...pageProps} />}
     </SessionProvider>
   );
 }

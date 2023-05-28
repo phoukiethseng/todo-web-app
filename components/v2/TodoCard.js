@@ -6,7 +6,7 @@ export function TodoCard({
   id,
   title,
   priority = 0,
-  date,
+  deadline,
   completed = false,
   onTitleChanged = (id, newTitle) => {},
   onPriorityChanged = (id) => {},
@@ -23,7 +23,7 @@ export function TodoCard({
     if (isEditing) {
       titleElemRef.current.focus();
     }
-  }, [isEditing, titleElemRef]);
+  }, [isEditing]);
   return (
     <div
       className={`w-[300px] rounded-[8px] px-[15px] py-[18px] flex flex-col gap-[20px] items-start ${
@@ -47,7 +47,7 @@ export function TodoCard({
                 setIsEditing(true);
               }
             }}
-            className={`h-[20px] text-Roboto text-sm font-semibold whitespace-nowrap text-ellipsis overflow-hidden hover:bg-primary-800 ${
+            className={`h-[20px] px-[7px] relative left-[-7px] text-Roboto text-sm font-semibold whitespace-nowrap text-ellipsis overflow-hidden hover:rounded-[8px] hover:bg-primary-800 ${
               mouseOver ? "text-white" : ""
             } ${completed ? "line-through" : ""}`}
           >
@@ -61,26 +61,36 @@ export function TodoCard({
             defaultValue={title}
             onKeyDown={(e) => {
               if (e.key === `Enter`) {
+                const newTitle = e.target.value.trim();
+                if (newTitle !== title) {
+                  onTitleChanged(id, newTitle);
+                }
                 setIsEditing(false);
               }
             }}
             onBlur={(e) => {
-              const currentTitle = e.target.value.trim();
-              if (currentTitle !== title) {
-                onTitleChanged(id, currentTitle);
+              const newTitle = e.target.value.trim();
+              console.log("newTitle", newTitle);
+              if (newTitle !== title) {
+                onTitleChanged(id, newTitle);
               }
               setIsEditing(false);
             }}
-            className="h-[20px] w-full border-0 rounded-[5px] py-[1px] px-[4px] outline-0 bg-gray-darker text-Roboto text-sm font-medium text-black-800"
+            className="h-[20px] w-full border-0 rounded-[5px] py-[1px] px-[7px] relative left-[-7px] outline-0 bg-gray-lighter text-Roboto text-sm font-semibold text-black-800"
           />
         )}
         <p
-          className={`text-Roboto text-xs text-gray-lighter ${
-            mouseOver ? "text-white" : ""
+          className={`text-Roboto text-xs ${
+            mouseOver ? "text-white" : "text-gray-darker"
           }`}
         >
           {completed && "Completed"}
-          {!completed && (date ? remainingTime(date) : "No Deadline set")}
+          {!completed &&
+            !mouseOver &&
+            (deadline ? remainingTime(deadline) : "No Deadline set")}
+          {!completed &&
+            mouseOver &&
+            (deadline ? displayDate(deadline) : "No Deadline set")}
         </p>
       </div>
       <div className="flex flex-row p-[0px] w-full justify-between items-start">
@@ -98,13 +108,15 @@ export function TodoCard({
             {priorityList[priority].name}
           </div>
           {dropDownOpen && (
-            <ul className="absolute w-[100px] top-[120%] flex flex-col gap-0 p-[5px] rounded-[8px] bg-base cursor-pointer">
+            <ul className="absolute w-[100px] top-[120%] flex flex-col gap-0 p-[5px] rounded-[8px] bg-base cursor-pointer z-50">
               {priorityList.map((priority, priorityIndex) => (
                 <div
                   onClick={() => {
                     setDropDownOpen(false);
                     setMouseOver(false);
-                    setTimeout(onPriorityChanged, 0);
+                    setTimeout(() => {
+                      onPriorityChanged(id, priorityIndex);
+                    }, 0);
                   }}
                   key={priorityIndex}
                   className={`text-Roboto font-md text-[10px] px-[10px] py-[5px] rounded-[8px] ${priority.className.text} hover:text-white hover:${priority.className.bg}`}
@@ -119,10 +131,10 @@ export function TodoCard({
         <div className="flex felx-row gap-[4px]">
           <div
             onClick={() => {
-              onComplete(id);
+              onComplete(id, !completed);
             }}
-            className={`w-[25px] h-[25px] rounded-[8px] bg-gray-darker flex justify-center items-center active:bg-gray-darker ${
-              completed ? "bg-green" : "hover:bg-green"
+            className={`w-[25px] h-[25px] rounded-[8px]  flex justify-center items-center active:bg-gray-lighter ${
+              completed ? "bg-green" : "bg-gray-lighter hover:bg-green"
             }`}
           >
             <img
@@ -134,7 +146,7 @@ export function TodoCard({
             onClick={() => {
               onDelete(id);
             }}
-            className="w-[25px] h-[25px] rounded-[8px] bg-gray-darker flex justify-center items-center hover:bg-secondary active:bg-gray-darker"
+            className="w-[25px] h-[25px] rounded-[8px] bg-gray-lighter flex justify-center items-center hover:bg-secondary active:bg-gray-lighter"
           >
             <img
               src="/trashcan.png"
@@ -182,6 +194,10 @@ const priorityList = [
 // @param {Date} deadline - The deadline date
 // @returns {string} - A string that represents the remaining time until the deadline
 function remainingTime(deadline) {
+  if (deadline.getTime() === 0) {
+    // epoch time mean deadline has not been set
+    return "No Deadline set";
+  }
   let remainingTimeInMilliSeconds = deadline.getTime() - Date.now();
   if (remainingTimeInMilliSeconds >= 0) {
     const remainingDays = Math.floor(
@@ -202,4 +218,29 @@ function remainingTime(deadline) {
 
     return `${remainingDays} days, ${remainingHours} hours, ${remainingMinutes} minutes remaining`;
   } else return "Past Due";
+}
+function displayDate(deadline) {
+  if (deadline.getTime() === 0) {
+    // epoch time mean deadline has not been set
+    return "No Deadline set";
+  }
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return `${
+    monthNames[deadline.getMonth()]
+  } ${deadline.getDate()}, ${deadline.getFullYear()} ${
+    deadline.getHours() % 12
+  }:${deadline.getMinutes()} ${deadline.getHours() >= 12 ? "PM" : "AM"}`;
 }

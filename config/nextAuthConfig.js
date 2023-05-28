@@ -54,11 +54,23 @@ const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    session: ({ session, token }) => {
+    session: async ({ session, token }) => {
       console.log("session callback token", token);
+      const foundId = await prisma.user.findFirst({
+        where: {
+          id: token.sub,
+        },
+      });
+      console.log(foundId);
+      if (!foundId) {
+        return null;
+      }
       session.user.id = token.sub;
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/signIn",
   },
 };
 

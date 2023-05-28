@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      transitionProperty: {
+        height: "height",
+      },
       fontFamily: {
         SecularOne: ["SecularOne"],
       },
@@ -19,8 +22,8 @@ module.exports = {
         },
         gray: {
           DEFAULT: "#eeeeee",
-          lighter: "#3c3c3c",
-          darker: "#c6c6c6",
+          darker: "#3c3c3c",
+          lighter: "#c6c6c6",
         },
         black: {
           DEFAULT: "#272727",

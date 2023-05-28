@@ -14,12 +14,15 @@ const populateDatabase = async () => {
       todos: {
         create: [
           {
-            name: "Kiethseng's first todo",
-            content: "This is my first todo",
+            title: "Kiethseng's first todo",
+            completed: false,
+            priority: 2,
           },
           {
-            name: "Kiethseng's second todo",
-            content: "This is my second todo",
+            title: "Kiethseng's second todo",
+            completed: false,
+            priority: 1,
+            deadline: new Date("2023-05-29T13:24:00.000Z"),
           },
         ],
       },
@@ -34,12 +37,15 @@ const populateDatabase = async () => {
       todos: {
         create: [
           {
-            name: "Emy's first todo",
-            content: "Hi",
+            title: "Emy's first todo",
+            completed: true,
+            priority: 2,
+            deadline: new Date("2023-06-29T13:24:00.000Z"),
           },
           {
-            name: "Emy's second todo",
-            content: "Hello",
+            title: "Emy's second todo",
+            completed: false,
+            priority: 0,
           },
         ],
       },

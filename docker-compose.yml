@@ -30,14 +30,34 @@ services:
       POSTGRES_PASSWORD: "123"
       POSTGRES_USER: app
       POSTGRES_DB: todo-web-app
+    ports:
+    # Mapped to 8080 instead of 5432 because we somehow cannot connect from host if container use default port
+      - 8080:5432 
       
-
+  db_admin:
+    container_name: db_admin
+    build:
+      context: .
+    depends_on:
+      - ui
+      - db
+    networks:
+      - todo-app-net
+    environment:
+      DATABASE_URL: postgresql://app:123@db/todo-web-app
+    entrypoint: ["npx", "prisma", "studio"]
+    volumes:
+      - ./prisma:/app/prisma
+    ports:
+      - 5555:5555
 
 networks:
   todo-app-net: {}
 
 volumes:
-  postgres-volume: 
+  postgres-volume: {
+    name: "postgres-volume"
+  }
     
 
 

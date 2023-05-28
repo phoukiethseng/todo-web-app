@@ -1,12 +1,12 @@
 import { addNewUser } from "@/utils/backend/addNewUser";
-import { getUserByUsername } from "@/utils/getUserByUsername";
+import { getUserByUsername } from "@/utils/backend/getUserByUsername";
 import { getCsrfToken } from "next-auth/react";
 import { Validator } from "node-input-validator";
 import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
   //TODO: verify csrfToken
-  const { crsfToken: clientCsrfToken } = req.body;
+  const { csrfToken: clientCsrfToken } = req.body;
   const serverCsrfToken = await getCsrfToken({ req });
   if (!clientCsrfToken || clientCsrfToken !== serverCsrfToken) {
     res.status(403).end();

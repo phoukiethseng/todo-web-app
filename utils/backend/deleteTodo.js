@@ -9,10 +9,11 @@ export async function deleteTodo(todoId, prisma = prismaClient) {
       where: {
         id: todoId,
       },
+      select: {
+        id: true,
+      },
     });
-    return {
-      id: result?.id,
-    };
+    return result;
   } catch (err) {
     return null;
   }

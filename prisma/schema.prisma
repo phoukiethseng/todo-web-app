@@ -18,10 +18,11 @@ model User {
 }
 
 model Todo {
-  id       String  @id @default(cuid())
-  name     String
-  content  String
-  authorId String
-  checked  Boolean @default(false)
-  author   User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  title     String
+  authorId  String
+  completed Boolean?  @default(false)
+  deadline  DateTime? @default("1970-01-01T00:00:00.000Z")
+  priority  Int?      @default(0)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

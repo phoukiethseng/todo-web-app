@@ -2,33 +2,41 @@ import { prisma as prismaClient } from "@/lib/prismaClient";
 
 export async function updateTodo({
   id,
-  name,
-  content,
-  checked,
+  title,
+  deadline,
+  completed,
+  priority,
   prisma = prismaClient,
 }) {
-  if (id === null || name === null || content === null || checked === null) {
+  console.log("updateTodo", { id, title, deadline, completed, priority });
+  if (id == null) {
     return null;
   }
-  console.log("updateTodo id", id);
-  console.log("updateTodo name", name);
-  console.log("updateTodo content", content);
-  console.log("updateTodo checked", checked);
+  if (
+    title === null &&
+    deadline === null &&
+    completed === null &&
+    priority === null
+  ) {
+    return null;
+  }
   try {
     const todo = await prisma.todo.update({
       where: {
         id: id,
       },
       data: {
-        name: name,
-        content: content,
-        checked: checked,
+        title,
+        completed,
+        deadline,
+        priority,
       },
       select: {
         id: true,
-        name: true,
-        content: true,
-        checked: true,
+        title: true,
+        completed: true,
+        deadline: true,
+        priority: true,
       },
     });
     console.log("updateTodo returning", todo);
