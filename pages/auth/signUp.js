@@ -53,6 +53,10 @@ export default function SignUpPage() {
       router.push("/auth/signIn");
     } else {
       const currentValidationList = { ...validationList };
+      for (const [key, value] of Object.entries(currentValidationList)) {
+        // Clear previous validation state
+        currentValidationList[key].invalid = false;
+      }
       for (const [key, value] of Object.entries(body.message)) {
         currentValidationList[key].invalid = true;
         currentValidationList[key].message = value.message;
