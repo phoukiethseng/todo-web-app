@@ -8,6 +8,7 @@ export default function SignUpPage() {
   const email = useRef();
   const username = useRef();
   const password = useRef();
+  const [isLoading, setIsLoading] = useState(false);
   const [csrfToken, setCsrfToken] = useState();
 
   // Keep track of each field validity state and its invalid messages
@@ -33,6 +34,7 @@ export default function SignUpPage() {
   const router = useRouter();
 
   const handleSignInSubmit = async () => {
+    setIsLoading(true);
     const response = await fetch("/api/user/signup", {
       headers: {
         "Content-Type": "application/json",
@@ -51,12 +53,17 @@ export default function SignUpPage() {
       router.push("/auth/signIn");
     } else {
       const currentValidationList = { ...validationList };
+      for (const [key, value] of Object.entries(currentValidationList)) {
+        // Clear previous validation state
+        currentValidationList[key].invalid = false;
+      }
       for (const [key, value] of Object.entries(body.message)) {
         currentValidationList[key].invalid = true;
         currentValidationList[key].message = value.message;
       }
       setValidationList(currentValidationList);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -156,6 +163,7 @@ export default function SignUpPage() {
             </div>
           </div>
           <Button
+            isLoading={isLoading}
             style={3}
             textSize={2}
             onClick={() => {

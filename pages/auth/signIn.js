@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function SignInPage({ credentialsError = false }) {
   const [csrfToken, setCsrfToken] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getCsrfToken().then((result) => {
       setCsrfToken(result);
@@ -41,6 +42,9 @@ export default function SignInPage({ credentialsError = false }) {
             </p>
           )}
           <form
+            onSubmit={() => {
+              setIsLoading(true);
+            }}
             id="signIn"
             method="post"
             action="/api/auth/callback/credentials"
@@ -68,7 +72,13 @@ export default function SignInPage({ credentialsError = false }) {
               </div>
             </div>
           </form>
-          <Button style={3} textSize={2} type="submit" form="signIn">
+          <Button
+            isLoading={isLoading}
+            style={3}
+            textSize={2}
+            type="submit"
+            form="signIn"
+          >
             Sign In
           </Button>
         </div>

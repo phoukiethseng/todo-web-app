@@ -1,10 +1,12 @@
-import { colorPalette } from "@/lib/colors";
+import Loading from "./Loading";
+
 export default function Button({
   children,
   onClick = () => {},
   style = 0,
   textSize = 0,
   padding = 0,
+  isLoading = false,
   ...rest
 }) {
   const styleList = [
@@ -17,8 +19,10 @@ export default function Button({
 
   return (
     <button
+      disabled={isLoading}
       onClick={onClick}
       className={`
+      min-w-[100px]
       ${styleList[style % styleList.length]}
       text-${
         textSizeList[textSize % textSizeList.length]
@@ -27,7 +31,12 @@ export default function Button({
       }`}
       {...rest}
     >
-      {children}
+      {!isLoading && children}
+      {isLoading && (
+        <div className="w-full h-full flex flex-row justify-center items-center">
+          <Loading width={25} height={25} />
+        </div>
+      )}
     </button>
   );
 }
