@@ -1,5 +1,0 @@
-{
-    "rewrites": [
-        {"source": "/v2/:slug", "destination": "/:slug"}
-    ]
-}
