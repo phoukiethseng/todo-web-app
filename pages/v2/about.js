@@ -6,12 +6,14 @@ import { useState } from "react";
 export default function AboutPage() {
   const [tabSelection, setTabSelection] = useState(0);
   return (
-    <Tab
-      itemComponents={[<AboutMe />, <AboutWebTechnology />]}
-      currentSelection={tabSelection}
-      itemNames={["About Me", "Web Technology"]}
-      onSelectionChange={(newSelection) => setTabSelection(newSelection)}
-    />
+    <div className="mt-[15px]">
+      <Tab
+        itemComponents={[<AboutMe />, <AboutWebTechnology />]}
+        currentSelection={tabSelection}
+        itemNames={["About Me", "Web Technology"]}
+        onSelectionChange={(newSelection) => setTabSelection(newSelection)}
+      />
+    </div>
   );
 }
 
