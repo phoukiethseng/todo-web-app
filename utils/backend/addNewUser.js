@@ -1,4 +1,5 @@
 import { prisma as prismaClient } from "@/lib/prismaClient";
+import bcrypt from "bcrypt";
 
 export async function addNewUser({
   username,
@@ -16,17 +17,21 @@ export async function addNewUser({
     return null;
   }
   try {
+    // Salt and hash password
+    const saltRound = 12;
+    const hashedPassword = await bcrypt.hash(password, saltRound);
     const user = await prisma.user.create({
       data: {
         name,
         username,
-        password,
+        password: hashedPassword,
         email,
       },
     });
     console.log("addNewUser returning", user);
     return user ?? null;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }

@@ -1,9 +1,11 @@
 import { authOptions } from "@/config/nextAuthConfig";
-import { addTodo } from "@/utils/backend/addTodo";
-import { deleteTodo } from "@/utils/backend/deleteTodo";
-import { fetchUserSingleTodo } from "@/utils/backend/fetchUserSingleTodo";
-import { updateTodo } from "@/utils/backend/updateTodo";
 import { getServerSession } from "next-auth";
+import {
+  handleGET,
+  handlePOST,
+  handleDELETE,
+  handlePUT,
+} from "@/utils/backend/todo/methodHandler";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -28,40 +30,8 @@ export default async function handler(req, res) {
       await handlePUT(req, res);
       break;
     default:
-      res.status(405).end();
+      res.status(405);
+      res.end();
   }
   res.end();
-}
-
-async function handlePUT(req, res) {
-  console.log("handlePUT", req.body);
-  const result = await updateTodo(req.body);
-  console.log("handlePUT result", result);
-  res.status(result ? 200 : 500).send(JSON.stringify(result));
-}
-
-async function handleGET(req, res) {
-  const result = await fetchUserSingleTodo(req.body.id);
-  if (result === null) {
-    res.status(404).end();
-    return;
-  }
-  res.send(JSON.stringify(result));
-}
-
-async function handlePOST(req, res, userId) {
-  console.log("handlePOST", req.body.name);
-  const result = await addTodo({
-    userId: userId,
-    todo: {
-      name: req.body.name,
-      content: req.body.content,
-    },
-  });
-  res.status(result ? 200 : 500).send(JSON.stringify(result));
-}
-
-async function handleDELETE(req, res) {
-  const result = await deleteTodo(req.body.id);
-  res.status(result ? 200 : 500).send(result);
 }
