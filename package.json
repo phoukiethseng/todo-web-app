@@ -8,7 +8,10 @@
     "start": "prisma migrate deploy && next start",
     "lint": "next lint",
     "seed": "node ./prisma/seed.js",
-    "test": "jest --silent --verbose"
+    "test": "jest --silent --verbose",
+    "prestart-test-server": "./scripts/setupTestDb.sh",
+    "poststart-test-server": "./scripts/tearDownTestDb.sh",
+    "start-test-server": "./scripts/startTestServer.sh"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
+    "cypress": "^12.13.0",
     "jest": "^29.5.0",
     "postcss": "^8.4.21",
     "prisma": "^4.11.0",

@@ -37,6 +37,7 @@ export default function NavBar({
       )}
       {signedIn && (
         <div
+          id="account-container"
           onClick={() => {
             setIsDropDownOpen((current) => !current);
           }}
@@ -60,7 +61,7 @@ export default function NavBar({
                 setTimeout(() => {
                   switch (choice) {
                     case 1:
-                      signOut();
+                      router.push("/api/auth/signout");
                       break;
                   }
                 }, 0);
