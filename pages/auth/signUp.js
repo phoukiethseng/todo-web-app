@@ -170,7 +170,7 @@ export default function SignUpPage() {
               handleSignInSubmit();
             }}
           >
-            Sign In
+            Sign Up
           </Button>
         </div>
       </div>

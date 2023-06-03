@@ -23,4 +23,4 @@ echo Exporting $ENV_VAR
 export $ENV_VAR
 echo Wait 3s for postgres container to initialize
 sleep 3
-cd $PROJECT_ROOT && npx prisma migrate deploy
+cd $PROJECT_ROOT && npx prisma migrate deploy && npm run seed

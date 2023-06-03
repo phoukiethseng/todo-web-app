@@ -54,7 +54,7 @@ export default function SignInPage({ credentialsError = false }) {
               <div className="flex flex-row justify-start items-center border rounded-[8px] w-[270px] h-[35px] pl-[7px] gap-[10px]">
                 <img src="/profileIcon.png" />
                 <input
-                  type="text"
+                  type="username"
                   placeholder="Username"
                   name="username"
                   className="outline-0 w-full"
