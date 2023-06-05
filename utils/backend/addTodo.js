@@ -1,18 +1,23 @@
 import { prisma as prismaClient } from "@/lib/prismaClient";
 export async function addTodo({
   userId,
-  todo: { name, content },
+  todo: { title, deadline, priority },
   prisma = prismaClient,
 }) {
-  if (userId === null || name === null || content === null) {
+  if (!userId) {
+    return null;
+  }
+
+  if (!(title || deadline || priority)) {
     return null;
   }
   let todo;
   try {
     todo = await prisma.todo.create({
       data: {
-        name: name,
-        content: content,
+        title,
+        deadline,
+        priority,
         author: {
           connect: {
             id: userId,
@@ -21,9 +26,9 @@ export async function addTodo({
       },
       select: {
         id: true,
-        name: true,
-        content: true,
-        checked: true,
+        title: true,
+        deadline: true,
+        priority: true,
       },
     });
     console.log("addTodo()", todo);

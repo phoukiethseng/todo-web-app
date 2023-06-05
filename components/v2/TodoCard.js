@@ -26,7 +26,7 @@ export function TodoCard({
   }, [isEditing]);
   return (
     <div
-      className={`w-[300px] rounded-[8px] px-[15px] py-[18px] flex flex-col gap-[20px] items-start ${
+      className={`todo-card w-[300px] rounded-[8px] px-[15px] py-[18px] flex flex-col gap-[20px] items-start ${
         mouseOver ? "bg-primary" : "bg-gray"
       }`}
       onMouseEnter={(e) => {
@@ -133,7 +133,7 @@ export function TodoCard({
             onClick={() => {
               onComplete(id, !completed);
             }}
-            className={`w-[25px] h-[25px] rounded-[8px]  flex justify-center items-center active:bg-gray-lighter ${
+            className={`todo-complete w-[25px] h-[25px] rounded-[8px]  flex justify-center items-center active:bg-gray-lighter ${
               completed ? "bg-green" : "bg-gray-lighter hover:bg-green"
             }`}
           >
@@ -146,7 +146,7 @@ export function TodoCard({
             onClick={() => {
               onDelete(id);
             }}
-            className="w-[25px] h-[25px] rounded-[8px] bg-gray-lighter flex justify-center items-center hover:bg-secondary active:bg-gray-lighter"
+            className="todo-delete w-[25px] h-[25px] rounded-[8px] bg-gray-lighter flex justify-center items-center hover:bg-secondary active:bg-gray-lighter"
           >
             <img
               src="/trashcan.png"

@@ -9,13 +9,15 @@
     "lint": "next lint",
     "seed": "node ./prisma/seed.js",
     "test": "jest --silent --verbose",
-    "prestart-test-server": "./scripts/setupTestDb.sh",
-    "poststart-test-server": "./scripts/tearDownTestDb.sh",
-    "start-test-server": "./scripts/startTestServer.sh"
+    "pree2e:start-server": "./scripts/setupTestDb.sh",
+    "poste2e:start-server": "./scripts/tearDownTestDb.sh",
+    "e2e:start-server": "./scripts/startTestServer.sh",
+    "e2e": "cypress open"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "bcrypt": "^5.1.0",
+    "cypress-plugin-api": "^2.11.1",
     "next": "13.2.1",
     "next-auth": "^4.19.2",
     "node-input-validator": "^4.5.1",
