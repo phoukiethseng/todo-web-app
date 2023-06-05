@@ -9,7 +9,7 @@ export default function AboutWebTechnology() {
       <div className="flex flex-row justify-center items-center rounded-[15px] cursor-pointer w-[190px] h-[190px] p-[20px] hover:bg-gray-lightest">
         <a href="https://nextjs.org">
           <img
-            src="/nextjs-logo.svg"
+            src="/Nextjs-logo.svg"
             className="object-contain object-center"
           />
         </a>
@@ -17,7 +17,7 @@ export default function AboutWebTechnology() {
       <div className="flex flex-row justify-center items-center rounded-[15px] cursor-pointer w-[190px] h-[190px] p-[20px] hover:bg-gray-lightest">
         <a href="https://tailwindcss.com">
           <img
-            src="/tailwindCSS-logo.svg"
+            src="/TailwindCSS-Logo.svg"
             className="object-contain object-center"
           />
         </a>
