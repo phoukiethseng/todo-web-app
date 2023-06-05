@@ -44,5 +44,22 @@ describe("Todos Page", () => {
     cy.contains(newTodo.title).should("not.exist");
   });
 
-  it.skip("Add empty todo won't trigger fetch", () => {});
+  it("Add empty todo won't trigger fetch (Press Enter)", () => {
+    cy.get("ul.todos-list")
+      .children()
+      .its("length")
+      .then((length) => {
+        cy.get("input").type("{enter}");
+        cy.get("ul.todos-list").children().should("have.length", length);
+      });
+  });
+  it("Add empty todo won't trigger fetch (Click Add Button)", () => {
+    cy.get("ul.todos-list")
+      .children()
+      .its("length")
+      .then((length) => {
+        cy.get("button").contains("Add").click();
+        cy.get("ul.todos-list").children().should("have.length", length);
+      });
+  });
 });

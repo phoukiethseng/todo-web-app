@@ -158,7 +158,7 @@ export default function TodosPage() {
         <div className="flex flex-col justify-start items-start gap-[10px]">
           <section className="flex flex-col gap-[10px]">
             <p className="text-2xl font-Roboto font-bold">Todos</p>
-            <ul className="scrollbar-hidden flex flex-row h-[125px] hover:h-[200px] w-[900px] gap-[15px] overflow-x-auto transition-height duration-150 ease-in-out">
+            <ul className="todos-list scrollbar-hidden flex flex-row h-[125px] hover:h-[200px] w-[900px] gap-[15px] overflow-x-auto transition-height duration-150 ease-in-out">
               {todosList
                 .filter((todo) => (todo.completed ? false : true))
                 .map((todo) => {
@@ -183,7 +183,7 @@ export default function TodosPage() {
           </section>
           <section className="flex flex-col gap-[10px]">
             <p className="text-2xl font-Roboto font-bold">Completed</p>
-            <ul className="scrollbar-hidden flex flex-row h-[125px] hover:h-[200px] w-[900px] gap-[15px] overflow-x-auto transition-height duration-150 ease-in-out">
+            <ul className="completed-list scrollbar-hidden flex flex-row h-[125px] hover:h-[200px] w-[900px] gap-[15px] overflow-x-auto transition-height duration-150 ease-in-out">
               {todosList
                 .filter((todo) => (todo.completed ? true : false))
                 .map((todo) => {
