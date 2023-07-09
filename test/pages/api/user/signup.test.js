@@ -56,6 +56,9 @@ describe("/api/user/signup request failed test", () => {
         message: "Validation failed",
       };
     });
+    const { getUserByUsername } = jest.requireMock(
+      "@/utils/backend/getUserByUsername"
+    );
     const req = {
       body: {
         csrfToken: "pineapple",
@@ -65,6 +68,7 @@ describe("/api/user/signup request failed test", () => {
     await signUpHandler(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(validateCredentials).toHaveBeenCalled();
+    expect(getUserByUsername).not.toHaveBeenCalled();
   });
   test("it should return 400 if username already existed", async () => {
     const { verifyCsrfToken } = jest.requireMock(

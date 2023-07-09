@@ -23,6 +23,7 @@ export default async function handler(req, res) {
   if (!valid) {
     res.status(400);
     res.send({ message: message });
+    return;
   }
   if (await getUserByUsername(username)) {
     // There is an existing user, deny request
