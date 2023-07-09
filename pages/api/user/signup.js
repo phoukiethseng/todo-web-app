@@ -4,6 +4,7 @@ import { verifyCsrfToken } from "@/utils/backend/verifyCsrfToken";
 import { validateCredentials } from "@/utils/backend/validateCredentials";
 
 export default async function handler(req, res) {
+  console.log("/api/user/singup, req.body", req.body);
   const { username, password, email, name, csrfToken } = req.body;
 
   // Validate csrf token

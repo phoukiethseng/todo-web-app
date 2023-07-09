@@ -3,6 +3,7 @@ import Button from "@/components/v2/Button";
 import { useState, useEffect, useRef } from "react";
 import { getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
+import { POST } from "@/utils/frontend/api";
 export default function SignUpPage() {
   const name = useRef();
   const email = useRef();
@@ -35,23 +36,16 @@ export default function SignUpPage() {
 
   const handleSignInSubmit = async () => {
     setIsLoading(true);
-    const response = await fetch("/api/user/signup", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify({
-        name: name.current.value,
-        email: email.current.value,
-        username: username.current.value,
-        password: password.current.value,
-        csrfToken: csrfToken,
-      }),
+    const { statusCode, data: body } = await POST("/api/user/signup", {
+      name: name.current.value,
+      email: email.current.value,
+      username: username.current.value,
+      password: password.current.value,
+      csrfToken: csrfToken,
     });
-    const body = await response.json();
-    if (response.ok) {
+    if (statusCode === 200) {
       router.push("/auth/signIn");
-    } else {
+    } else if (statusCode === 400) {
       const currentValidationList = { ...validationList };
       for (const [key, value] of Object.entries(currentValidationList)) {
         // Clear previous validation state

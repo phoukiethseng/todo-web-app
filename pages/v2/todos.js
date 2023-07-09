@@ -3,17 +3,15 @@ import { authOptions } from "@/config/nextAuthConfig";
 import { getServerSession } from "next-auth";
 import { useState, useEffect, useRef } from "react";
 import Button from "@/components/v2/Button";
+import { GET, PUT, DELETE, POST } from "@/utils/frontend/api";
 
 export default function TodosPage() {
   const addTodoInputBox = useRef();
   const [todosList, setTodosList] = useState([]);
   const [isAddTodoLoading, setIsAddTodoLoading] = useState(false);
   const fetchTodos = async () => {
-    const response = await fetch("/api/user/todos", {
-      method: "get",
-    });
-    if (response.ok) {
-      const data = await response.json();
+    const { statusCode, data } = await GET("/api/user/todos");
+    if (statusCode === 200) {
       setTodosList(data);
     }
   };
@@ -24,18 +22,11 @@ export default function TodosPage() {
   }, []);
 
   const handleTodoComplete = async (id, newState) => {
-    const response = await fetch("/api/todo", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        completed: newState,
-      }),
+    const { statusCode, data: newTodo } = await PUT("/api/todo", {
+      id: id,
+      completed: newState,
     });
-    if (response.ok) {
-      const newTodo = await response.json();
+    if (statusCode === 200) {
       const newTodosList = todosList.map((todo) =>
         todo.id === id ? newTodo : todo
       );
@@ -44,17 +35,11 @@ export default function TodosPage() {
   };
 
   const handleTodoDelete = async (id) => {
-    const response = await fetch("/api/todo", {
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-      }),
+    const { statusCode, data } = await DELETE("/api/todo", {
+      id: id,
     });
-    if (response.ok) {
-      const { id: resultId } = await response.json();
+    if (statusCode === 200) {
+      const { id: resultId } = data;
       const newTodosList = todosList.filter((todo) =>
         todo.id === resultId ? false : true
       );
@@ -63,18 +48,11 @@ export default function TodosPage() {
   };
 
   const handleTodoPriorityChanged = async (id, priorityIndex) => {
-    const response = await fetch("/api/todo", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        priority: priorityIndex,
-      }),
+    const { statusCode, data: newTodo } = await PUT("/api/todo", {
+      id: id,
+      priority: priorityIndex,
     });
-    if (response.ok) {
-      const newTodo = await response.json();
+    if (statusCode === 200) {
       const newTodosList = todosList.map((todo) =>
         todo.id === id ? newTodo : todo
       );
@@ -83,17 +61,11 @@ export default function TodosPage() {
   };
 
   const handleTodoTitleChanged = async (id, newTitle) => {
-    const response = await fetch("/api/todo", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        title: newTitle,
-      }),
+    const { statusCode, data } = await PUT("/api/todo", {
+      id: id,
+      title: newTitle,
     });
-    if (response.ok) {
+    if (statusCode === 200) {
       const newTodosList = todosList.map((todo) => {
         if (todo.id === id) {
           todo.title = newTitle;
@@ -109,17 +81,10 @@ export default function TodosPage() {
       return;
     }
     setIsAddTodoLoading(true);
-    const response = await fetch("/api/todo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: addTodoInputBox.current.value,
-      }),
+    const { statusCode, data: newTodo } = await POST("/api/todo", {
+      title: addTodoInputBox.current.value,
     });
-    if (response.ok) {
-      const newTodo = await response.json();
+    if (statusCode === 200) {
       const newTodoList = [...todosList, newTodo];
       setTodosList(newTodoList);
       addTodoInputBox.current.value = "";
