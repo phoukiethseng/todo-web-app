@@ -17,14 +17,23 @@ const authOptions = {
         },
       },
       authorize: async (credentials, req) => {
-        let user = await prisma.user.findFirst({
-          where: {
-            username: credentials.username,
-          },
-          select: {
-            password: true,
-          },
-        });
+        let user;
+        try {
+          user = await prisma.user.findFirst({
+            where: {
+              username: credentials.username,
+            },
+            select: {
+              password: true,
+            },
+          });
+        } catch (err) {
+          console.log(
+            "Error occurred in authorize callback, prisma query thrown an error ",
+            err
+          );
+          return false;
+        }
         if (!user) {
           // User not found
           return false;
@@ -55,18 +64,23 @@ const authOptions = {
   },
   callbacks: {
     session: async ({ session, token }) => {
-      console.log("session callback token", token);
-      const foundId = await prisma.user.findFirst({
-        where: {
-          id: token.sub,
-        },
-      });
-      console.log(foundId);
-      if (!foundId) {
+      try {
+        console.log("session callback, token", token);
+        const foundId = await prisma.user.findFirst({
+          where: {
+            id: token.sub,
+          },
+        });
+        console.log("session callback, found user in database", foundId);
+        if (!foundId) {
+          return null;
+        }
+        session.user.id = token.sub;
+        return session;
+      } catch (err) {
+        console.log("Error occurred in session callback: ", err);
         return null;
       }
-      session.user.id = token.sub;
-      return session;
     },
   },
   pages: {
