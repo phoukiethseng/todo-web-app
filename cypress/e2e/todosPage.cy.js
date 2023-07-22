@@ -6,6 +6,11 @@ describe("Todos Page", () => {
     cy.visit("http://localhost:3000/auth/signIn");
     cy.get("input[type=username]").type("kiethseng");
     cy.get("input[type=password]").type("012858378");
+    // Ignore fetch to profile picture url
+    cy.intercept(
+      "https://i.pinimg.com/222x/57/70/f0/5770f01a32c3c53e90ecda61483ccb08.jpg",
+      (req) => req.destroy()
+    );
     cy.get("button").contains("Sign In").click();
     cy.url().should("include", "/v2/todos");
   });

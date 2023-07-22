@@ -21,8 +21,14 @@ model Todo {
   id        String    @id @default(cuid())
   title     String
   authorId  String
-  completed Boolean?  @default(false)
+  completed Boolean   @default(false)
   deadline  DateTime? @default("1970-01-01T00:00:00.000Z")
-  priority  Int?      @default(0)
+  priority  Priority  @default(NOT_IMPORTANT)
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+enum Priority {
+  NOT_IMPORTANT
+  IMPORTANT
+  URGENT
 }

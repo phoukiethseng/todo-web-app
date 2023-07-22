@@ -3,16 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "./scripts/dev/start-dev-db.sh && prisma db push && prisma generate && npm run seed",
     "dev": "next dev",
     "build": "next build",
     "start": "prisma migrate deploy && next start",
     "lint": "next lint",
     "seed": "node ./prisma/seed.js",
     "test": "jest --silent --verbose",
-    "pree2e:start-server": "./scripts/setupTestDb.sh",
-    "poste2e:start-server": "./scripts/tearDownTestDb.sh",
-    "e2e:start-server": "./scripts/startTestServer.sh",
-    "e2e": "cypress open"
+    "e2e": "start-server-and-test dev http://localhost:3000/ test:e2e",
+    "test:e2e": "cypress open"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
@@ -31,6 +30,7 @@
     "jest": "^29.5.0",
     "postcss": "^8.4.21",
     "prisma": "^4.11.0",
+    "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.2.7"
   }
 }

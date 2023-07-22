@@ -47,10 +47,10 @@ export default function TodosPage() {
     }
   };
 
-  const handleTodoPriorityChanged = async (id, priorityIndex) => {
+  const handleTodoPriorityChanged = async (id, priority) => {
     const { statusCode, data: newTodo } = await PUT("/api/todo", {
       id: id,
-      priority: priorityIndex,
+      priority: priority,
     });
     if (statusCode === 200) {
       const newTodosList = todosList.map((todo) =>

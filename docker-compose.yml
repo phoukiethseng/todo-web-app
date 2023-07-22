@@ -1,29 +1,7 @@
 services:
-  ui:
-    build:
-      context: .
-    container_name: ui
-    networks:
-      - todo-app-net
-    ports:
-      - 80:80
-    depends_on:
-      - db
-    environment:
-      PORT: 80
-      NEXTAUTH_SECRET: 9DFu4723hsgiiyogsf732fglhsfgjTDFGFofdvbbsdlfbkvtKLGKJfgjn74djf
-      NEXTAUTH_URL: "http://localhost/"
-      DATABASE_URL: "postgresql://app:123@db/todo-web-app?schema=public&connection_limit=5"
-    volumes:
-    - ./:/app
-    - /app/node_modules
-    entrypoint: ["sh", "./scripts/start-ui.sh"]
-
   db:
     container_name: db
     image: postgres:14-alpine
-    volumes:
-      - postgres-volume:/var/lib/postgresql/data
     networks:
       - todo-app-net
     environment:
@@ -31,35 +9,8 @@ services:
       POSTGRES_USER: app
       POSTGRES_DB: todo-web-app
     ports:
-    # Mapped to 8080 instead of 5432 because we somehow cannot connect from host if container use default port
-      - 8080:5432 
-      
-  db_admin:
-    container_name: db_admin
-    build:
-      context: .
-    depends_on:
-      - ui
-      - db
-    networks:
-      - todo-app-net
-    environment:
-      DATABASE_URL: postgresql://app:123@db/todo-web-app
-    entrypoint: ["npx", "prisma", "studio"]
-    volumes:
-      - ./prisma:/app/prisma
-    ports:
-      - 5555:5555
+      # Mapped to 8080 instead of 5432 because we somehow cannot connect from host if container use default port
+      - 8080:5432
 
 networks:
   todo-app-net: {}
-
-volumes:
-  postgres-volume: {
-    name: "postgres-volume"
-  }
-    
-
-
-
-

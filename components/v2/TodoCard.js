@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
+import { Priority } from "@prisma/client";
 
 export function TodoCard({
   id,
   title,
-  priority = 0,
+  priority = Priority.NOT_IMPORTANT,
   deadline,
   completed = false,
   onTitleChanged = (id, newTitle) => {},
@@ -100,28 +101,26 @@ export function TodoCard({
               setDropDownOpen(true);
             }}
             className={`px-[10px] py-[5px] rounded-[8px] border text-[10px] font-medium cursor-pointer ${
-              mouseOver
-                ? "text-white border-white"
-                : `${priorityList[priority].className.text} ${priorityList[priority].className.border}`
+              mouseOver ? "text-white border-white" : "border-green text-green"
             }`}
           >
-            {priorityList[priority].name}
+            {priority}
           </div>
           {dropDownOpen && (
             <ul className="absolute w-[100px] top-[120%] flex flex-col gap-0 p-[5px] rounded-[8px] bg-base cursor-pointer z-50">
-              {priorityList.map((priority, priorityIndex) => (
+              {Object.keys(Priority).map((priority, priorityIndex) => (
                 <div
                   onClick={() => {
                     setDropDownOpen(false);
                     setMouseOver(false);
                     setTimeout(() => {
-                      onPriorityChanged(id, priorityIndex);
+                      onPriorityChanged(id, priority);
                     }, 0);
                   }}
                   key={priorityIndex}
-                  className={`text-Roboto font-md text-[10px] px-[10px] py-[5px] rounded-[8px] ${priority.className.text} hover:text-white hover:${priority.className.bg}`}
+                  className={`text-Roboto font-md text-[10px] px-[10px] py-[5px] rounded-[8px] text-green hover:text-white hover:bg-green`}
                 >
-                  <li>{priority.name}</li>
+                  <li>{priority}</li>
                 </div>
               ))}
             </ul>
@@ -159,36 +158,36 @@ export function TodoCard({
   );
 }
 
-const priorityList = [
-  {
-    className: {
-      text: "text-green",
-      border: "border-green",
-      bg: "bg-green",
-    },
-    color: "green",
-    name: "Not Important",
-  },
-  {
-    className: {
-      text: "text-orange",
-      border: "border-orange",
-      bg: "bg-orange",
-      // hover:bg-orange
-    },
-    color: "orange",
-    name: "Important",
-  },
-  {
-    className: {
-      text: "text-secondary",
-      border: "border-secondary",
-      bg: "bg-secondary",
-    },
-    color: "secondary",
-    name: "Urgent",
-  },
-];
+// const priorityList = [
+//   {
+//     className: {
+//       text: "text-green",
+//       border: "border-green",
+//       bg: "bg-green",
+//     },
+//     color: "green",
+//     name: "Not Important",
+//   },
+//   {
+//     className: {
+//       text: "text-orange",
+//       border: "border-orange",
+//       bg: "bg-orange",
+//       // hover:bg-orange
+//     },
+//     color: "orange",
+//     name: "Important",
+//   },
+//   {
+//     className: {
+//       text: "text-secondary",
+//       border: "border-secondary",
+//       bg: "bg-secondary",
+//     },
+//     color: "secondary",
+//     name: "Urgent",
+//   },
+// ];
 
 // remainingTime function calculates the remaining time until a deadline
 // @param {Date} deadline - The deadline date
